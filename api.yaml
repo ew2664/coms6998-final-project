@@ -1,0 +1,718 @@
+openapi: 3.0.3
+info:
+  title: Columbia Reports - OpenAPI 3.0
+  description: "COMS 6998 Cloud Computing Final Project"
+  version: 1.0.0
+tags:
+  - name: group
+    description: Operations about report groups
+  - name: report
+    description: Operations about reports
+  - name: user
+    description: Operations about users
+paths:
+  /group:
+    post:
+      tags:
+        - group
+      summary: Create a new report group
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportGroup'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportGroup'          
+        '405':
+          description: Invalid input
+  /group/findByStatus:
+    get:
+      tags:
+        - group
+      summary: Finds report groups by status
+      description: Multiple status values can be provided with comma separated strings
+      parameters:
+        - name: status
+          in: query
+          description: Status values to filter by
+          required: true
+          schema:
+            type: string
+            default: submitted
+            enum:
+              - submitted
+              - processing
+              - completed
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportGroup'          
+        '400':
+          description: Invalid status value
+  /group/findByBuilding:
+    get:
+      tags:
+        - group
+      summary: Finds report groups by building
+      description: Multiple building IDs can be provided with comma separated strings
+      parameters:
+        - name: buildingId
+          in: query
+          description: Building IDs to filter by
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportGroup'          
+        '400':
+          description: Invalid status value
+  /group/findByTag:
+    get:
+      tags:
+        - group
+      summary: Finds report groups by tag
+      description: Multiple tags can be provided with comma separated strings
+      parameters:
+        - name: tag
+          in: query
+          description: Tags to filter by
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportGroup'          
+        '400':
+          description: Invalid status value
+  /group/{groupId}:
+    get:
+      tags:
+        - group
+      summary: Find report group by ID
+      parameters:
+        - name: groupId
+          in: path
+          description: ID of report group to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportGroup'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Report group not found
+    put:
+      tags:
+        - group
+      summary: Update an existing report group
+      parameters:
+        - name: groupId
+          in: path
+          description: ID of report to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportGroup'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportGroup'          
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Report group not found
+        '405':
+          description: Validation exception
+    delete:
+      tags:
+        - group
+      summary: Delete a report group
+      parameters:
+        - name: groupId
+          in: path
+          description: ID of report group to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Report group not found
+  /group/{groupId}/add:
+    post:
+      tags:
+        - group
+      summary: Add report to a report group
+      parameters:
+        - name: groupId
+          in: path
+          description: ID of report group to add report to
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: reportId
+          in: query
+          description: ID of report to add
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid report ID supplied
+        '404':
+          description: Report group not found
+  /report:
+    post:
+      tags:
+        - report
+      summary: Submit a new report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'          
+        '405':
+          description: Invalid input
+  /report/findByUser:
+    get:
+      tags:
+        - report
+      summary: Finds reports by user
+      parameters:
+        - name: userId
+          in: query
+          description: User ID to search by
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'          
+        '400':
+          description: Invalid status value
+  /report/findByStatus:
+    get:
+      tags:
+        - report
+      summary: Finds reports by status
+      description: Multiple status values can be provided with comma separated strings
+      parameters:
+        - name: status
+          in: query
+          description: Status values to filter by
+          required: true
+          schema:
+            type: string
+            default: submitted
+            enum:
+              - submitted
+              - processing
+              - completed
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'          
+        '400':
+          description: Invalid status value
+  /report/findByBuilding:
+    get:
+      tags:
+        - report
+      summary: Finds reports by building
+      description: Multiple building IDs can be provided with comma separated strings
+      parameters:
+        - name: buildingId
+          in: query
+          description: Building IDs to filter by
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'          
+        '400':
+          description: Invalid status value
+  /report/findByTag:
+    get:
+      tags:
+        - report
+      summary: Finds reports by tag
+      description: Multiple tags can be provided with comma separated strings
+      parameters:
+        - name: tag
+          in: query
+          description: Tags to filter by
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'          
+        '400':
+          description: Invalid status value
+  /report/{reportId}:
+    get:
+      tags:
+        - report
+      summary: Find report by ID
+      parameters:
+        - name: reportId
+          in: path
+          description: ID of report to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Report not found
+    put:
+      tags:
+        - report
+      summary: Update an existing report
+      parameters:
+        - name: reportId
+          in: path
+          description: ID of report to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'          
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Report not found
+    delete:
+      tags:
+        - report
+      summary: Delete a report
+      parameters:
+        - name: reportId
+          in: path
+          description: ID of report to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Report not found
+  /report/{reportId}/images:
+    get:
+      tags:
+        - report
+      summary: Download images for a report
+      parameters:
+        - name: reportId
+          in: path
+          description: ID of report to download images for
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: image-url
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Report not found
+    put:
+      tags:
+        - report
+      summary: Upload an image for a report
+      parameters:
+        - name: reportId
+          in: path
+          description: ID of report to upload images for
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          image/png: {}
+      responses:
+        '200':
+          description: S3 PUT operation response
+          content:
+            application/json:
+              schema:
+                type: object
+  /user:
+    post:
+      tags:
+        - user
+      summary: Create user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /user/login:
+    post:
+      tags:
+        - user
+      summary: Logs user into the system
+      description: ''
+      parameters:
+        - name: UNI
+          in: query
+          description: The UNI for login
+          required: false
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            X-Rate-Limit:
+              description: calls per hour allowed by the user
+              schema:
+                type: integer
+                format: int64
+            X-Expires-After:
+              description: date in UTC when token expires
+              schema:
+                type: string
+                format: date-time
+        '400':
+          description: Invalid UNI/password supplied
+  /user/logout:
+    post:
+      tags:
+        - user
+      summary: Logs out current logged in user session
+      description: ''
+      parameters: []
+      responses:
+        default:
+          description: Successful operation
+  /user/{UNI}:
+    get:
+      tags:
+        - user
+      summary: Get user by user name
+      description: ''
+      parameters:
+        - name: UNI
+          in: path
+          description: The UNI of the user to fetch
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'          
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+    put:
+      tags:
+        - user
+      summary: Update user
+      parameters:
+        - name: UNI
+          in: path
+          description: The UNI of the user to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+            description: Successful operation
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      parameters:
+        - name: UNI
+          in: path
+          description: The UNI of the user to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+            description: Successful operation
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+components:
+  schemas:
+    ReportGroup:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 2
+        title:
+          type: string
+          format: text
+          example: Broken Heater
+        description:
+          type: string
+          format: text
+          example: The heater isn't working.
+        location:
+          type: object
+          properties:
+            building:
+              type: integer
+              format: int64
+              example: 1
+            floor:
+              type: string
+              format: text
+              example: 8F
+            room:
+              type: string
+              format: text
+              example: 808
+            coordinates:
+              type: object
+              properties:
+                latitude:
+                  type: string
+                longitude:
+                  type: string
+        photoUrls:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          example: pending
+          enum:
+            - pending
+            - in progress
+            - completed
+    Report:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        groupId:
+          type: integer
+          format: int64
+          example: 2
+        user:
+          type: string
+          format: text
+          example: jj1234
+        title:
+          type: string
+          format: text
+          example: Broken Heater
+        description:
+          type: string
+          format: text
+          example: The heater in my room doesn't seem to be working.
+        location:
+          type: object
+          properties:
+            building:
+              type: integer
+              format: int64
+              example: 1
+            floor:
+              type: string
+              format: text
+              example: 8F
+            room:
+              type: string
+              format: text
+              example: 808
+            coordinates:
+              type: object
+              properties:
+                latitude:
+                  type: string
+                longitude:
+                  type: string
+        reportTime:
+          type: string
+          format: date-time
+        photoUrls:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          example: pending
+          enum:
+            - pending
+            - in progress
+            - completed
+    Building:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Wien Hall
+    User:
+      type: object
+      properties:
+        uni:
+          type: string
+          example: jj1234
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Jay
+        email:
+          type: string
+          example: jj1234@columbia.edu
+        password:
+          type: string
+          example: '12345'
+        phone:
+          type: string
+          example: '12345'
